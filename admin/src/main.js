@@ -198,10 +198,10 @@ String.prototype.replaceAll = function(s1, s2) {
   return this.replace(new RegExp(s1, "gm"), s2);
 }
 
-// 添加crmeb chat 统计
-var __s = document.createElement('script');
-__s.src=`${SettingMer.apiBaseURL}/public/jsconfig/getcrmebchatconfig`;
-document.head.appendChild(__s);
+// // 添加crmeb chat 统计
+// var __s = document.createElement('script');
+// __s.src=`${SettingMer.apiBaseURL}/public/jsconfig/getcrmebchatconfig`;
+// document.head.appendChild(__s);
 
 new Vue({
   el: '#app',
