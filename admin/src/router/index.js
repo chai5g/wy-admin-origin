@@ -10,9 +10,6 @@
 
 import Vue from 'vue'
 import Router from 'vue-router'
-
-Vue.use(Router)
-
 /* Layout */
 import Layout from '@/layout'
 
@@ -30,7 +27,9 @@ import appSettingRouter from './modules/appSetting'
 import maintainRouter from './modules/maintain'
 import mobileRouter from './modules/mobile'
 import codegen from './modules/codegen'
+import statistics from '@/router/modules/statistics'
 
+Vue.use(Router)
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -43,14 +42,14 @@ import codegen from './modules/codegen'
  * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    noCache: true                if set true, the page will no be cached(default is false)
-    affix: true                  if set true, the tag will affix in the tags-view
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
+ roles: ['admin','editor']    control the page roles (you can set multiple roles)
+ title: 'title'               the name show in sidebar and breadcrumb (recommend set)
+ icon: 'svg-name'             the icon show in the sidebar
+ noCache: true                if set true, the page will no be cached(default is false)
+ affix: true                  if set true, the tag will affix in the tags-view
+ breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
+ activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+ }
  */
 
 /**
@@ -61,6 +60,9 @@ import codegen from './modules/codegen'
  */
 
 export const constantRoutes = [
+
+// 物业模块
+  statistics,
   // 商品
   storeRouter,
   // 订单
@@ -85,7 +87,6 @@ export const constantRoutes = [
   mobileRouter,
   // 代码生成
   codegen,
-
   {
     path: '/404',
     component: () => import('@/views/error-page/404'),
@@ -132,7 +133,19 @@ export const constantRoutes = [
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
         meta: { title: '主页', icon: 'dashboard', affix: true }
-      },
+      }
+    ]
+  },
+  {
+    path: '/deployment',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/deployment/index'),
+        name: 'Deployment',
+        meta: { title: '客户部署', icon: 'dashboard', affix: true }
+      }
     ]
   },
   {
@@ -148,9 +161,7 @@ export const constantRoutes = [
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes = [
-
-]
+export const asyncRoutes = []
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support

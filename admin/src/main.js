@@ -61,6 +61,7 @@ import * as selfUtil from '@/utils/ZBKJIutil.js';
 import SettingMer from "@/utils/settingMer";
 import plugins from './plugins'
 import directive from './directive' //directive
+import JTable from '@/components/JTable'
 
 Vue.use(VueLazyload, {
   preLoad: 1.3,
@@ -78,6 +79,7 @@ Vue.use(VueAwesomeSwiper)
 Vue.use(plugins)
 Vue.use(directive)
 
+Vue.component('JTable', JTable)
 Vue.component('attrFrom', attrFrom)
 Vue.component('UploadIndex', UploadIndex)
 Vue.component('SelfUpload', SelfUpload)
@@ -98,8 +100,8 @@ Vue.prototype.$validator = function(rule) {
   return new schema(rule);
 };
 Vue.prototype.handleTree = handleTree
-Vue.prototype.parseTime = parseTime 
-Vue.prototype.resetForm = resetForm 
+Vue.prototype.parseTime = parseTime
+Vue.prototype.resetForm = resetForm
 
 let cookieName = "VCONSOLE";
 let query = parseQuery();
