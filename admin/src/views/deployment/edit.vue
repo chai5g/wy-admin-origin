@@ -34,9 +34,14 @@
                   </el-form-item>
                   <el-form-item label="小区地址">
                     <el-cascader
-                        v-model="pram.wyAppPlotList[key].province"
-                        :options="provinceOptions"
-                        placeholder="请选择省市区"
+                      ref="cascader"
+                      :props="{ value: 'id', label: 'name', children: 'child' }"
+                      v-model="pram.wyAppPlotList[key].province"
+                      :options="provinceOptions"
+                      placeholder="请选择省市区"
+                     @change="()=>{
+                       provinceChange(key)
+                     }"
                     ></el-cascader>
                   </el-form-item>
                   <el-form-item label="小区详细地址" prop="firstMin">
@@ -172,36 +177,7 @@ export default {
       editData: {},
       myHeaders: { 'X-Token': getToken() },
       editorContentLaebl: '',
-      provinceOptions: [
-        {
-          value: 'zhinan',
-          label: '指南',
-          children: [
-            {
-              value: 'shejiyuanze',
-              label: '设计原则',
-              children: [
-                {
-                  value: 'yizhi',
-                  label: '一致'
-                },
-                {
-                  value: 'fankui',
-                  label: '反馈'
-                },
-                {
-                  value: 'xiaolv',
-                  label: '效率'
-                },
-                {
-                  value: 'kekong',
-                  label: '可控'
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      provinceOptions: []
       // basicForm:{editorContent:""}
     }
   },
@@ -216,6 +192,7 @@ export default {
     if (this.isEdit) {
       this.hadlerInitEditData()
     }
+    this.getProvince()
   },
   methods: {
     getInfo() {
@@ -223,6 +200,23 @@ export default {
       //   this.editData = data
       //   this.hadlerInitEditData()
       // })
+      // 获取省市区数据
+      // this.getProvince()
+
+    },
+    provinceChange(key) {
+      // console.log(this.$refs.cascader[0].getCheckedNodes(), 'this.$refs.cascader[0].getCheckedNodes()')
+      this.pram.wyAppPlotList[key].provinceName = this.$refs.cascader[0].getCheckedNodes()[0].pathLabels[0]
+      this.pram.wyAppPlotList[key].provinceId = this.$refs.cascader[0].getCheckedNodes()[0].path[0]
+      this.pram.wyAppPlotList[key].cityName = this.$refs.cascader[0].getCheckedNodes()[0].pathLabels[1]
+      this.pram.wyAppPlotList[key].cityId = this.$refs.cascader[0].getCheckedNodes()[0].path[1]
+      this.pram.wyAppPlotList[key].areaName = this.$refs.cascader[0].getCheckedNodes()[0].pathLabels[2]
+      this.pram.wyAppPlotList[key].areaId = this.$refs.cascader[0].getCheckedNodes()[0].path[2]
+    },
+    getProvince() {
+      deployApi.getRegion().then(data => {
+        this.provinceOptions = data
+      })
     },
     modalPicTap(tit, key) {
       const _this = this
@@ -234,9 +228,11 @@ export default {
       }, tit, 'content')
     },
     hadlerInitEditData() {
-      console.log(this.detailData, '-=-=-=-')
       // this.param = this.detailData
       const { miniLogoUrl, contactPicUrl, wyAppPlotList, ...other } = this.detailData
+      wyAppPlotList.forEach(item=>{
+        item.province = [item.provinceId,item.cityId,item.areaId]
+      })
       this.pram = {
         ...other,
         wyAppPlotList: wyAppPlotList || [],

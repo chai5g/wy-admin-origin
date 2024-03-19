@@ -82,3 +82,15 @@ export function updateDeploy(pram) {
     data: pram
   })
 }
+
+/**
+ * 获取省市区数据
+ * @param pram
+ */
+export function getRegion(pram) {
+  return request({
+    url: '/admin/city/list',
+    method: 'GET',
+    params: pram
+  })
+}
