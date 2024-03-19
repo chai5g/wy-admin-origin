@@ -3,84 +3,88 @@
     <el-card class="box-card">
       <div class="components-container">
         <el-form ref="pram" label-width="150px" :model="pram">
-          <el-form-item label="序号" prop="title"
-                        :rules="[{required:true, message:'请填写标题', trigger:['blur','change']}]"
+          <!--          <el-form-item label="序号" prop="title"-->
+          <!--                        :rules="[{required:true, message:'请填写标题', trigger:['blur','change']}]"-->
+          <!--          >-->
+          <!--            <el-input v-model="pram.title" placeholder="标题" maxlength="100"/>-->
+          <!--          </el-form-item>-->
+          <el-form-item label="客户" prop="name"
+                        :rules="[{required:true, message:'请填客户', trigger:['blur','change']}]"
           >
-            <el-input v-model="pram.title" placeholder="标题" maxlength="100"/>
+            <el-input v-model="pram.name" placeholder="作者" maxlength="20"/>
           </el-form-item>
-          <el-form-item label="客户" prop="author"
-                        :rules="[{required:true, message:'请填作者', trigger:['blur','change']}]"
+          <el-form-item label="小区" prop="type"
+                        :rules="[{required:true, message:'请选择小区', trigger:['blur','change']}]"
           >
-            <el-input v-model="pram.author" placeholder="作者" maxlength="20"/>
-          </el-form-item>
-          <el-form-item label="小区" prop="author"
-                        :rules="[{required:true, message:'请填作者', trigger:['blur','change']}]"
-          >
-            <el-radio-group v-model="pram.isAll">
-              <el-radio label="1">全部小区</el-radio>
-              <el-radio label="0">限定小区</el-radio>
+            <el-radio-group v-model="pram.type">
+              <el-radio :label="1">全部小区</el-radio>
+              <el-radio :label="2">限定小区</el-radio>
             </el-radio-group>
           </el-form-item>
 
 
           <el-form-item label="分段收费">
-            <el-form ref="form"  >
-              <div v-for="(item,key) of pram.sectionaCharge"
+            <el-form ref="form">
+              <div v-for="(item,key) of pram.wyAppPlotList"
                    style="border: 1px dashed #cccccc;padding: 10px;margin-top: 10px;display: flex;justify-content: space-between"
               >
                 <div style="display: flex;width: 100%;gap: 10px">
                   <el-form-item label="小区名称">
-                    <el-input v-model="pram.sectionaCharge[key].name" placeholder="请输入小区名称"/>
+                    <el-input v-model="pram.wyAppPlotList[key].name" placeholder="请输入小区名称"/>
                   </el-form-item>
                   <el-form-item label="小区地址">
                     <el-cascader
-                        v-model="pram.sectionaCharge[key].province"
+                        v-model="pram.wyAppPlotList[key].province"
                         :options="provinceOptions"
                         placeholder="请选择省市区"
                     ></el-cascader>
                   </el-form-item>
                   <el-form-item label="小区详细地址" prop="firstMin">
-                    <el-input v-model="pram.sectionaCharge[key].detailAddress" placeholder="请输入小区详细地址"/>
+                    <el-input v-model="pram.wyAppPlotList[key].address" placeholder="请输入小区详细地址"/>
                   </el-form-item>
                 </div>
                 <div>
-                  <el-button type="text" style="color: #7a0003;margin-top: 30px" @click="pram.sectionaCharge.splice(key,1)">删除
+                  <el-button type="text" style="color: #7a0003;margin-top: 30px"
+                             @click="pram.wyAppPlotList.splice(key,1)"
+                  >删除
                   </el-button>
                 </div>
 
               </div>
             </el-form>
             <el-button style="width: 100%;margin-top: 10px" type="primary"
-                       @click='pram.sectionaCharge.push({ firstMin: "", money: "" })'
+                       @click='pram.wyAppPlotList.push({ firstMin: "", money: "" })'
             >新增
             </el-button>
           </el-form-item>
 
 
-          <el-form-item label="域名地址" :rules="[{required:true, message:'请选择分类', trigger:['blur','change']}]">
-            <el-input v-model="pram.synopsis" maxlength="50" :rows="2" resize="none" placeholder="小程序名称"/>
+          <el-form-item label="域名地址" prop="dnsUrl"
+                        :rules="[{required:true, message:'请输入域名地址', trigger:['blur','change']}]"
+          >
+            <el-input v-model="pram.dnsUrl" maxlength="50" :rows="2" resize="none" placeholder="域名地址"/>
           </el-form-item>
 
-          <el-form-item label="小程序名称" prop="synopsis"
+          <el-form-item label="小程序名称" prop="miniName"
                         :rules="[{required:true, message:'请填写小程序名称', trigger:['blur','change']}]"
           >
-            <el-input v-model="pram.synopsis" maxlength="50" :rows="2" resize="none" placeholder="小程序名称"/>
+            <el-input v-model="pram.miniName" maxlength="50" :rows="2" resize="none" placeholder="小程序名称"/>
           </el-form-item>
-          <el-form-item label="小程序LOGO" prop="imageInput"
-                        :rules="[{ required: true, message: '请上传图文封面', trigger: 'change' }]"
+          <el-form-item label="小程序LOGO" prop="miniLogoUrl"
+                        :rules="[{ required: true, message: '请上传小程序LOGO', trigger: 'change' }]"
           >
-            <div class="upLoadPicBox" @click="modalPicTap('1')">
-              <div v-if="pram.imageInput" class="pictrue"><img :src="pram.imageInput"></div>
+            <div class="upLoadPicBox" @click="modalPicTap('1','miniLogoUrl')">
+              <div v-if="pram.miniLogoUrl" class="pictrue"><img :src="SettingMer.httpUrl+pram.miniLogoUrl"></div>
               <div v-else class="upLoad">
                 <i class="el-icon-camera cameraIconfont"/>
               </div>
             </div>
           </el-form-item>
-          <el-form-item label="联系方式" prop="imageInput"
-                        :rules="[{ required: true, message: '请上传图文封面', trigger: 'change' }]"
+          <el-form-item label="联系方式" prop="contactPicUrl"
+                        :rules="[{ required: true, message: '请上传联系方式图片', trigger: 'change' }]"
           >
-            <div class="upLoadPicBox" @click="modalPicTap('1')">
-              <div v-if="pram.imageInput" class="pictrue"><img :src="pram.imageInput"></div>
+            <div class="upLoadPicBox" @click="modalPicTap('1','contactPicUrl')">
+              <div v-if="pram.contactPicUrl" class="pictrue"><img :src="SettingMer.httpUrl+pram.contactPicUrl"></div>
               <div v-else class="upLoad">
                 <i class="el-icon-camera cameraIconfont"/>
               </div>
@@ -100,12 +104,40 @@
 
 <script>
 import Tinymce from '@/components/Tinymce/index'
-import * as categoryApi from '@/api/categoryApi.js'
-import * as articleApi from '@/api/article.js'
+import * as deployApi from '@/api/deployment.js'
 import { getToken } from '@/utils/auth'
 import { Debounce } from '@/utils/validate'
+import SettingMer from '@/utils/settingMer'
 
 export default {
+  computed: {
+    SettingMer() {
+      return SettingMer
+    }
+  },
+  props: {
+    id: {
+      type: String,
+      default: ''
+    },
+    detailData: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    isEdit: {
+      type: Boolean,
+      default: false
+    },
+    hideDialog: {
+      type: Function,
+      default: () => {
+        return () => {
+        }
+      }
+    }
+  },
   // name: "edit",
   components: { Tinymce },
   data() {
@@ -122,25 +154,18 @@ export default {
         emitPath: false
       },
       pram: {
-        author: null,
-        cid: null,
-        content: '', //<span>My Document\'s Title</span>
-        imageInput: '',
-        isBanner: false,
-        isHot: null,
-        shareSynopsis: null,
-        shareTitle: null,
-        sort: 0,
-        synopsis: null,
-        title: null,
-        url: null,
-        id: null,
+        name: null,
+        dnsUrl: null,
+        miniName: '', //<span>My Document\'s Title</span>
+        miniLogoUrl: '',
+        contactPicUrl: false,
+        type: 1,
         // mediaId: null
-        sectionaCharge: [
+        wyAppPlotList: [
           {
-            detailAddress: '',
+            address: '',
             name: '',
-            province: '',
+            province: ''
           }
         ]
       },
@@ -173,144 +198,6 @@ export default {
                   label: '可控'
                 }
               ]
-            },
-            {
-              value: 'daohang',
-              label: '导航',
-              children: [
-                {
-                  value: 'cexiangdaohang',
-                  label: '侧向导航'
-                },
-                {
-                  value: 'dingbudaohang',
-                  label: '顶部导航'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          value: 'zujian',
-          label: '组件',
-          children: [
-            {
-              value: 'basic',
-              label: 'Basic',
-              children: [
-                {
-                  value: 'layout',
-                  label: 'Layout 布局'
-                },
-                {
-                  value: 'color',
-                  label: 'Color 色彩'
-                },
-                {
-                  value: 'typography',
-                  label: 'Typography 字体'
-                },
-                {
-                  value: 'icon',
-                  label: 'Icon 图标'
-                },
-                {
-                  value: 'button',
-                  label: 'Button 按钮'
-                }
-              ]
-            },
-            {
-              value: 'form',
-              label: 'Form',
-              children: [
-                {
-                  value: 'radio',
-                  label: 'Radio 单选框'
-                },
-                {
-                  value: 'checkbox',
-                  label: 'Checkbox 多选框'
-                },
-                {
-                  value: 'input',
-                  label: 'Input 输入框'
-                },
-                {
-                  value: 'input-number',
-                  label: 'InputNumber 计数器'
-                },
-                {
-                  value: 'select',
-                  label: 'Select 选择器'
-                },
-                {
-                  value: 'cascader',
-                  label: 'Cascader 级联选择器'
-                },
-                {
-                  value: 'switch',
-                  label: 'Switch 开关'
-                },
-                {
-                  value: 'slider',
-                  label: 'Slider 滑块'
-                },
-                {
-                  value: 'time-picker',
-                  label: 'TimePicker 时间选择器'
-                },
-                {
-                  value: 'date-picker',
-                  label: 'DatePicker 日期选择器'
-                },
-                {
-                  value: 'datetime-picker',
-                  label: 'DateTimePicker 日期时间选择器'
-                },
-                {
-                  value: 'upload',
-                  label: 'Upload 上传'
-                },
-                {
-                  value: 'rate',
-                  label: 'Rate 评分'
-                },
-                {
-                  value: 'form',
-                  label: 'Form 表单'
-                }
-              ]
-            },
-            {
-              value: 'data',
-              label: 'Data',
-              children: [
-                {
-                  value: 'table',
-                  label: 'Table 表格'
-                },
-                {
-                  value: 'tag',
-                  label: 'Tag 标签'
-                },
-                {
-                  value: 'progress',
-                  label: 'Progress 进度条'
-                },
-                {
-                  value: 'tree',
-                  label: 'Tree 树形控件'
-                },
-                {
-                  value: 'pagination',
-                  label: 'Pagination 分页'
-                },
-                {
-                  value: 'badge',
-                  label: 'Badge 标记'
-                }
-              ]
             }
           ]
         }
@@ -326,52 +213,41 @@ export default {
       this.getInfo()
       this.setTagsViewTitle()
     }
-    this.handlerGetCategoryTreeData()
+    if (this.isEdit) {
+      this.hadlerInitEditData()
+    }
   },
   methods: {
     getInfo() {
-      categoryApi.articleInfoApi({ id: this.$route.params.id }).then(data => {
-        this.editData = data
-        this.hadlerInitEditData()
-      })
+      // categoryApi.articleInfoApi({ id: this.$route.params.id }).then(data => {
+      //   this.editData = data
+      //   this.hadlerInitEditData()
+      // })
     },
-    modalPicTap(tit) {
+    modalPicTap(tit, key) {
       const _this = this
       this.$modalUpload(function(img) {
-        _this.pram.imageInput = img[0].sattDir
+        console.log(img[0])
+        // img[0].sattDir 从第三个/字符开始截取后面的字符串
+        console.log(img[0].sattDir.substring(img[0].sattDir.indexOf('/', 7)))
+        _this.pram[key] = img[0].sattDir.substring(img[0].sattDir.indexOf('/', 7))
       }, tit, 'content')
     },
     hadlerInitEditData() {
-      if (!this.$route.params.id) return
-      const {
-        author, cid, content, imageInput,
-        isBanner, isHot, shareSynopsis, shareTitle, sort, synopsis, title, url, id
-      } = this.editData
-      this.pram.author = author
-      this.pram.cid = Number.parseInt(cid)
-      this.pram.content = content
-      this.pram.imageInput = imageInput
-      this.pram.isBanner = isBanner
-      this.pram.isHot = isHot
-      this.pram.shareSynopsis = shareSynopsis
-      this.pram.shareTitle = shareTitle
-      this.pram.sort = sort
-      this.pram.synopsis = synopsis
-      this.pram.title = title
-      this.pram.url = url
-      this.pram.id = id
-      // this.pram.mediaId = mediaId
-    },
-    handlerGetCategoryTreeData() {
-      categoryApi.listCategroy({ type: 3, status: '' }).then(data => {
-        this.categoryTreeData = data.list
-        localStorage.setItem('articleClass', JSON.stringify(data.list))
-      })
+      console.log(this.detailData, '-=-=-=-')
+      // this.param = this.detailData
+      const { miniLogoUrl, contactPicUrl, wyAppPlotList, ...other } = this.detailData
+      this.pram = {
+        ...other,
+        wyAppPlotList: wyAppPlotList || [],
+        miniLogoUrl: miniLogoUrl.substring(miniLogoUrl.indexOf('/', 7)),
+        contactPicUrl: contactPicUrl.substring(contactPicUrl.indexOf('/', 7))
+      }
     },
     handerSubmit: Debounce(function(form) {
       this.$refs[form].validate(valid => {
         if (!valid) return
-        if (!this.$route.params.id) {
+        if (!this.$route.params.id && !this.isEdit) {
           this.handlerSave()
         } else {
           this.handlerUpdate()
@@ -379,33 +255,31 @@ export default {
       })
     }),
     handlerUpdate() {
+
       this.loading = true
-      this.pram.cid = Array.isArray(this.pram.cid) ? this.pram.cid[0]:this.pram.cid
-      this.pram.shareTitle = this.pram.title
-      this.pram.shareSynopsis = this.pram.synopsis
-      articleApi.UpdateArticle(this.pram).then(data => {
-        this.$message.success('编辑文章成功')
+      deployApi.updateDeploy({
+        ...this.pram,
+        id: this.detailData.id
+      }).then(data => {
+        this.$message.success('更新部署成功')
         this.loading = false
-        this.$router.push({ path: '/content/articleManager' })
+        this.$emit('hideDialog')
       }).catch(() => {
         this.loading = false
       })
     },
     handlerSave() {
       this.loading = true
-      this.pram.cid = Array.isArray(this.pram.cid) ? this.pram.cid[0]:this.pram.cid
-      this.pram.shareTitle = this.pram.title
-      this.pram.shareSynopsis = this.pram.synopsis
-      articleApi.AddArticle(this.pram).then(data => {
-        this.$message.success('新增文章成功')
+      deployApi.addDeploy(this.pram).then(data => {
+        this.$message.success('新增部署成功')
         this.loading = false
-        this.$router.push({ path: '/content/articleManager' })
+        this.$emit('hideDialog')
       }).catch(() => {
         this.loading = false
       })
     },
     setTagsViewTitle() {
-      const title = '编辑文章'
+      const title = '编辑客户部署'
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.$route.params.id}` })
       this.$store.dispatch('tagsView/updateVisitedView', route)
     }
