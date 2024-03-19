@@ -230,14 +230,14 @@ export default {
     hadlerInitEditData() {
       // this.param = this.detailData
       const { miniLogoUrl, contactPicUrl, wyAppPlotList, ...other } = this.detailData
-      wyAppPlotList.forEach(item=>{
+      wyAppPlotList && wyAppPlotList.forEach(item=>{
         item.province = [item.provinceId,item.cityId,item.areaId]
       })
       this.pram = {
         ...other,
         wyAppPlotList: wyAppPlotList || [],
-        miniLogoUrl: miniLogoUrl.substring(miniLogoUrl.indexOf('/', 7)),
-        contactPicUrl: contactPicUrl.substring(contactPicUrl.indexOf('/', 7))
+        miniLogoUrl: miniLogoUrl&&miniLogoUrl.substring(miniLogoUrl.indexOf('/', 7)),
+        contactPicUrl: contactPicUrl&&contactPicUrl.substring(contactPicUrl.indexOf('/', 7))
       }
     },
     handerSubmit: Debounce(function(form) {
