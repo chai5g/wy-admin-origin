@@ -77,8 +77,8 @@
 </template>
 
 <script>
-import request from '@/utils/request' // import { listPaymentMethod } from '@/api/payment/paymentMethod';
-// import { listPaymentMethod } from '@/api/payment/paymentMethod';
+import request from '@/utils/request';
+import { listPaymentMethod } from '@/api/payment/paymentMethod';
 
 export default {
   components: {},
@@ -87,47 +87,47 @@ export default {
       query: {
         payMethod: undefined,
         type: undefined,
-        name: undefined
+        name: undefined,
       },
       defaultProps: {
         children: 'children',
-        label: 'fullName'
+        label: 'fullName',
       },
       pickerOptions: {
         shortcuts: [
           {
             text: '最近一周',
             onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit('pick', [start, end])
-            }
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            },
           },
           {
             text: '最近一个月',
             onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit('pick', [start, end])
-            }
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            },
           },
           {
             text: '最近三个月',
             onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit('pick', [start, end])
-            }
-          }
-        ]
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            },
+          },
+        ],
       },
       pickerVal: [],
       typeOptions: [
         { label: '付款', value: 'pay' },
-        { label: '退款', value: 'refund' }
+        { label: '退款', value: 'refund' },
       ],
       payMethodOptions: [],
       list: [],
@@ -137,7 +137,7 @@ export default {
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
-        sidx: 'pay_time'
+        sidx: 'pay_time',
       },
       columnList: [
         { prop: 'payTime', label: '付款时间' },
@@ -145,125 +145,91 @@ export default {
         { prop: 'money', label: '单行输入' },
         { prop: 'type', label: '支付和退款' },
         { prop: 'describe', label: '描述' },
-        { prop: 'certificate', label: '支付凭证' }
-      ]
-    }
+        { prop: 'certificate', label: '支付凭证' },
+      ],
+    };
   },
   computed: {},
   created() {
-    this.initData()
-    this.getPayMethodOptions()
+    this.initData();
+    this.getPayMethodOptions();
   },
   methods: {
     getPayMethodOptions() {
-      // listPaymentMethod().then(res => {
-      //     this.payMethodOptions = res.data.list;
-      // });
-      this.payMethodOptions = []
+      listPaymentMethod().then(res => {
+        this.payMethodOptions = res.data.list;
+      });
     },
     initData() {
-      this.listLoading = true
+      this.listLoading = true;
       if (this.pickerVal && this.pickerVal.length) {
-        this.query.payBeginDate = this.pickerVal[0]
-        this.query.payEndDate = this.pickerVal[1]
+        this.query.payBeginDate = this.pickerVal[0];
+        this.query.payEndDate = this.pickerVal[1];
       } else {
-        this.query.payBeginDate = ''
-        this.query.payEndDate = ''
+        this.query.payBeginDate = '';
+        this.query.payEndDate = '';
       }
       let query = {
         ...this.listQuery,
-        ...this.query
-      }
-      // request({
-      //     url: `/statistics/PaymentPayLog`,
-      //     method: 'get',
-      //     data: query,
-      // }).then(res => {
-      this.list = [
-        {
-          payNo: '202107010001',
-          name: '物业费',
-          payerName: '张三',
-          type: '支付',
-          payTime: '2021-07-01 10:00:00',
-          payMethod: '微信',
-          lateFeeMoney: 0,
-          discountMoney: 0,
-          receivableMoney: 100,
-          payMoney: 100,
-          prePayMoney: 0,
-          changeMoney: 0,
-          preSaveMoney: 0
-        },
-        {
-          payNo: '202107010002',
-          name: '车位租赁费',
-          payerName: '李四',
-          type: '支付',
-          payTime: '2021-07-01 10:00:00',
-          payMethod: '支付宝',
-          lateFeeMoney: 0,
-          discountMoney: 0,
-          receivableMoney: 200,
-          payMoney: 200,
-          prePayMoney: 0,
-          changeMoney: 0,
-          preSaveMoney: 0
-        }
+        ...this.query,
+      };
+      request({
+        url: `/statistics/PaymentPayLog`,
+        method: 'get',
+        data: query,
+      }).then(res => {
+        this.list = res.data.list;
+        this.total = res.data.pagination.total;
 
-      ]
-      this.total = 2
-
-      this.listLoading = false
-      // });
+        this.listLoading = false;
+      });
     },
     handleDel(id) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
-        type: 'warning'
+        type: 'warning',
       })
       .then(() => {
         request({
           url: `/wuye/PaymentPayLog/${id}`,
-          method: 'DELETE'
+          method: 'DELETE',
         }).then(res => {
           this.$message({
             type: 'success',
             message: res.msg,
             onClose: () => {
-              this.initData()
-            }
-          })
-        })
+              this.initData();
+            },
+          });
+        });
       })
-      .catch(() => {
-      })
+      .catch(() => {});
     },
     search() {
       this.listQuery = {
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
-        sidx: 'pay_time'
-      }
-      this.initData()
+        sidx: 'pay_time',
+      };
+      this.initData();
     },
     refresh(isrRefresh) {
-      this.formVisible = false
-      if (isrRefresh) this.reset()
+      this.formVisible = false;
+      if (isrRefresh) this.reset();
     },
     reset() {
       for (let key in this.query) {
-        this.query[key] = undefined
+        this.query[key] = undefined;
       }
-      this.pickerVal = []
+      this.pickerVal = [];
       this.listQuery = {
         currentPage: 1,
         pageSize: 20,
         sort: 'desc',
-        sidx: 'pay_time'
-      }
-      this.initData()
-    }
-  }
-}
+        sidx: 'pay_time',
+      };
+      this.initData();
+    },
+  },
+};
 </script>

@@ -324,24 +324,24 @@
               </el-checkbox-group>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
-            <el-form-item label="活动优先级：">
-              <div class="color-list acea-row row-middle">
-                <div
-                  :disabled="isDisabled"
-                  class="color-item" :class="activity[item]"
-                  v-for="item in formValidate.activity"
-                  :key="item"
-                  draggable="true"
-                  @dragstart="handleDragStart($event, item)"
-                  @dragover.prevent="handleDragOver($event, item)"
-                  @dragenter="handleDragEnterFont($event, item)"
-                  @dragend="handleDragEnd($event, item)"
-                >{{item}}</div>
-                <div class="tip">可拖动按钮调整活动的优先展示顺序</div>
-              </div>
-            </el-form-item>
-          </el-col>
+<!--          <el-col :span="24">-->
+<!--            <el-form-item label="活动优先级：">-->
+<!--              <div class="color-list acea-row row-middle">-->
+<!--                <div-->
+<!--                  :disabled="isDisabled"-->
+<!--                  class="color-item" :class="activity[item]"-->
+<!--                  v-for="item in formValidate.activity"-->
+<!--                  :key="item"-->
+<!--                  draggable="true"-->
+<!--                  @dragstart="handleDragStart($event, item)"-->
+<!--                  @dragover.prevent="handleDragOver($event, item)"-->
+<!--                  @dragenter="handleDragEnterFont($event, item)"-->
+<!--                  @dragend="handleDragEnd($event, item)"-->
+<!--                >{{item}}</div>-->
+<!--                <div class="tip">可拖动按钮调整活动的优先展示顺序</div>-->
+<!--              </div>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
           <el-col :span="24">
             <el-form-item label="优惠券：" class="proCoupon">
               <div class="acea-row">
@@ -1206,8 +1206,8 @@
           let list = response.list;
           let arr = [],arr1 = [];
           const listArr = [{ name: '是否热卖', value: 'isGood' }];
-          let typeLists = [ 
-            { name: '', value: 'isHot',type:'2' },   //热门榜单 
+          let typeLists = [
+            { name: '', value: 'isHot',type:'2' },   //热门榜单
             { name: '', value: 'isBenefit' ,type:'4'}, //促销单品
             { name: '', value: 'isBest',type:'1' }, //精品推荐
             { name: '', value: 'isNew',type:'3' }]; //首发新品

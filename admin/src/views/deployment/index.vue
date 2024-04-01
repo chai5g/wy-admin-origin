@@ -104,6 +104,7 @@
                 type="text"
                 size="small"
                 @click="handlerOpenEdit(1,scope.row)"
+                v-if="scope.row.status !==1"
             >编辑
             </el-button>
             <el-button
@@ -111,6 +112,8 @@
                 size="small"
                 @click="handlerDelete(scope.row)"
                 v-hasPermi="['admin:article:delete']"
+                v-if="scope.row.status !==1"
+
             >删除
             </el-button>
           </template>

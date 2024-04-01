@@ -1,6 +1,6 @@
 <template>
   <div :class="{'has-logo':showLogo}" :style="{ backgroundColor: variables.menuBackground }">
-    <logo v-if="showLogo" :collapse="isCollapse" />
+<!--    <logo v-if="showLogo" :collapse="isCollapse" />-->
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
@@ -12,7 +12,7 @@
         :collapse-transition="true"
         mode="vertical"
       >
-        <sidebar-item v-for="route in sidebarRouters" :key="route.url" :item="route" :base-path="route.url" /> 
+        <sidebar-item v-for="route in sidebarRouters" :key="route.url" :item="route" :base-path="route.url" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -58,4 +58,3 @@ export default {
     color: #fff !important;
   }
 </style>
-

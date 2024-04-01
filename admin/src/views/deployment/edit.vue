@@ -23,7 +23,7 @@
           </el-form-item>
 
 
-          <el-form-item label="分段收费">
+          <el-form-item label=" " v-if="pram.type === 2">
             <el-form ref="form">
               <div v-for="(item,key) of pram.wyAppPlotList"
                    style="border: 1px dashed #cccccc;padding: 10px;margin-top: 10px;display: flex;justify-content: space-between"
@@ -75,11 +75,23 @@
           >
             <el-input v-model="pram.miniName" maxlength="50" :rows="2" resize="none" placeholder="小程序名称"/>
           </el-form-item>
+          <el-form-item label="管理员账号" prop="adminAccount"
+                        :rules="[{required:true, message:'请填写小程序名称', trigger:['blur','change']}]"
+          >
+            <el-input v-model="pram.adminAccount" maxlength="50" :rows="2" resize="none" placeholder="管理员账号"/>
+          </el-form-item>
+          <el-form-item label="管理员密码" prop="adminAccountPwd"
+                        :rules="[{required:true, message:'请填写管理员密码', trigger:['blur','change']}]"
+          >
+            <el-input v-model="pram.adminAccountPwd" maxlength="50" :rows="2" resize="none" type="password" placeholder="小程序名称"/>
+          </el-form-item>
+
+
           <el-form-item label="小程序LOGO" prop="miniLogoUrl"
                         :rules="[{ required: true, message: '请上传小程序LOGO', trigger: 'change' }]"
           >
             <div class="upLoadPicBox" @click="modalPicTap('1','miniLogoUrl')">
-              <div v-if="pram.miniLogoUrl" class="pictrue"><img :src="SettingMer.httpUrl+pram.miniLogoUrl"></div>
+              <div v-if="pram.miniLogoUrl" class="pictrue"><img :src="SettingMer.httpUrl+'/'+pram.miniLogoUrl"></div>
               <div v-else class="upLoad">
                 <i class="el-icon-camera cameraIconfont"/>
               </div>
@@ -89,7 +101,7 @@
                         :rules="[{ required: true, message: '请上传联系方式图片', trigger: 'change' }]"
           >
             <div class="upLoadPicBox" @click="modalPicTap('1','contactPicUrl')">
-              <div v-if="pram.contactPicUrl" class="pictrue"><img :src="SettingMer.httpUrl+pram.contactPicUrl"></div>
+              <div v-if="pram.contactPicUrl" class="pictrue"><img :src="SettingMer.httpUrl+'/'+pram.contactPicUrl"></div>
               <div v-else class="upLoad">
                 <i class="el-icon-camera cameraIconfont"/>
               </div>
@@ -223,8 +235,8 @@ export default {
       this.$modalUpload(function(img) {
         console.log(img[0])
         // img[0].sattDir 从第三个/字符开始截取后面的字符串
-        console.log(img[0].sattDir.substring(img[0].sattDir.indexOf('/', 7)))
-        _this.pram[key] = img[0].sattDir.substring(img[0].sattDir.indexOf('/', 7))
+        console.log(img[0].sattDir.substring(img[0].sattDir.indexOf('/', 8)))
+        _this.pram[key] = img[0].sattDir.substring(img[0].sattDir.indexOf('/', 8))
       }, tit, 'content')
     },
     hadlerInitEditData() {
@@ -236,8 +248,8 @@ export default {
       this.pram = {
         ...other,
         wyAppPlotList: wyAppPlotList || [],
-        miniLogoUrl: miniLogoUrl&&miniLogoUrl.substring(miniLogoUrl.indexOf('/', 7)),
-        contactPicUrl: contactPicUrl&&contactPicUrl.substring(contactPicUrl.indexOf('/', 7))
+        miniLogoUrl: miniLogoUrl&&miniLogoUrl.substring(miniLogoUrl.indexOf('/', 8)),
+        contactPicUrl: contactPicUrl&&contactPicUrl.substring(contactPicUrl.indexOf('/',8))
       }
     },
     handerSubmit: Debounce(function(form) {

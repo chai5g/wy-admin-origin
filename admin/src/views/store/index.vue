@@ -20,7 +20,7 @@
         <router-link :to=" { path:'/store/list/creatProduct' } ">
           <el-button size="small" type="primary" class="mr10" v-hasPermi="['admin:product:save']">添加商品</el-button>
         </router-link>
-        <el-button size="small" type="success" class="mr10" @click="onCopy" v-hasPermi="['admin:product:save']">商品采集</el-button>
+<!--        <el-button size="small" type="success" class="mr10" @click="onCopy" v-hasPermi="['admin:product:save']">商品采集</el-button>-->
         <el-button size="small" icon="el-icon-upload2" @click="exports" v-hasPermi="['admin:export:excel:product']">导出</el-button>
       </div>
       <el-table
@@ -68,9 +68,9 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="商品名称" 
-        prop="storeName" 
-        min-width="300" 
+        <el-table-column label="商品名称"
+        prop="storeName"
+        min-width="300"
         :show-overflow-tooltip="true">
         </el-table-column>
         <el-table-column
@@ -97,7 +97,7 @@
           min-width="70"
           align="center"
         />
-        
+
         <el-table-column
           label="添加时间"
           min-width="120"
@@ -112,7 +112,7 @@
           min-width="80"
           fixed="right"
         >
-          <template slot-scope="scope" 
+          <template slot-scope="scope"
           v-if="checkPermi(['admin:product:up','admin:product:down'])">
             <el-switch
               :disabled="Number(tableFrom.type) > 2"
@@ -301,7 +301,7 @@ export default {
           row.isShow = !row.isShow
         })
     },
-   
+
   }
 }
 </script>
