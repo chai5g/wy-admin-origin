@@ -2,8 +2,8 @@
   <div class="divBox">
     <el-card class="box-card">
       <el-row class="Jcommon-search-box" :gutter="16">
-        <el-form @submit.native.prevent>
-          <el-col :span="5">
+        <el-form @submit.native.prevent :inline="true" :model="formInline">
+<!--          <el-col :span="5">-->
             <el-form-item label="付款方式">
               <el-select v-model="query.payMethod" placeholder="请选择" clearable>
                 <el-option
@@ -15,16 +15,16 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="4">
+<!--          </el-col>-->
+<!--          <el-col :span="4">-->
             <el-form-item label="类型">
               <el-select v-model="query.type" placeholder="请选择">
                 <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value"
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="7">
+<!--          </el-col>-->
+<!--          <el-col :span="7">-->
             <el-form-item label="缴费时间">
               <el-date-picker
                 v-model="pickerVal"
@@ -37,10 +37,15 @@
                 :editable="false"
               ></el-date-picker>
             </el-form-item>
-          </el-col>
-          <el-col :span="5">
+<!--          </el-col>-->
+<!--          <el-col :span="3">-->
             <el-form-item label="客户名称">
-              <el-select v-model="query.customerId" placeholder="请选择" clearable>
+              <el-select v-model="query.ownerId"
+                         filterable
+                         remote
+                         reserve-keyword
+                         :remote-method="getClients" placeholder="请选择" clearable
+              >
                 <el-option
                   v-for="(item, index) in customerList"
                   :key="index"
@@ -50,10 +55,14 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="5">
+<!--          </el-col>-->
+<!--          <el-col :span="3">-->
             <el-form-item label="小区名称">
-              <el-select v-model="query.communityId" placeholder="请选择" clearable>
+              <el-select v-model="query.houseBlockId" filterable
+                         remote
+                         reserve-keyword
+                         :remote-method="getCommunityList" clearable
+              >
                 <el-option
                   v-for="(item, index) in communityList"
                   :key="index"
@@ -63,13 +72,13 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="5">
+<!--          </el-col>-->
+<!--          <el-col :span="3">-->
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">查询</el-button>
               <el-button icon="el-icon-refresh-right" @click="reset()">重置</el-button>
             </el-form-item>
-          </el-col>
+<!--          </el-col>-->
         </el-form>
       </el-row>
       <div class="Jcommon-layout-main Jflex-main">
@@ -119,7 +128,9 @@ export default {
       query: {
         payMethod: undefined,
         type: undefined,
-        name: undefined
+        name: undefined,
+        ownerId: undefined,
+        houseBlockId: undefined
       },
       defaultProps: {
         children: 'children',
@@ -171,6 +182,8 @@ export default {
         sort: 'desc',
         sidx: 'pay_time'
       },
+      customerList: [],
+      communityList: [],
       columnList: [
         { prop: 'payTime', label: '付款时间' },
         { prop: 'payMethod', label: '支付方式' },
@@ -270,6 +283,36 @@ export default {
     handleSizeChange(val) {
       this.listQuery.pageSize = val
       this.initData()
+    },
+    getClients(query) {
+      request({
+        url: `${process.env.VUE_APP_BASE_API2}/api/admin/ds/owner/list`,
+        method: 'get',
+        params: { name: query }
+      }).then(res => {
+        console.log(res)
+        this.customerList = res.map(item => {
+          return {
+            id: item.id,
+            name: item.userName
+          }
+        })
+      })
+    },
+    getCommunityList(query) {
+      request({
+        url: `${process.env.VUE_APP_BASE_API2}/api/admin/ds/HouseBlock/list`,
+        method: 'get',
+        params: { name: query }
+      }).then(res => {
+        console.log(res)
+        this.communityList = res.map(item => {
+          return {
+            id: item.id,
+            name: item.name
+          }
+        })
+      })
     },
   }
 }

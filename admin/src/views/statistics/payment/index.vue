@@ -2,54 +2,63 @@
   <div class="divBox">
     <el-card class="box-card">
       <el-row class="Jcommon-search-box" :gutter="16">
-        <el-form @submit.native.prevent>
-          <el-col :span="7">
+        <el-form @submit.native.prevent :inline="true" :model="formInline">
+<!--          <el-col :span="8">-->
             <el-form-item label="收费时间">
               <el-date-picker
-                  v-model="pickerVal"
-                  type="daterange"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  :picker-options="pickerOptions"
-                  value-format="timestamp"
-                  clearable
-                  :editable="false"
+                v-model="pickerVal"
+                type="daterange"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :picker-options="pickerOptions"
+                value-format="timestamp"
+                clearable
+                :editable="false"
               ></el-date-picker>
             </el-form-item>
-          </el-col>
+<!--          </el-col>-->
           <!--                  客户-->
-          <el-col :span="5">
+<!--          <el-col :span="5">-->
             <el-form-item label="客户名称">
-              <el-select v-model="query.customerId" placeholder="请选择" clearable>
+              <el-select v-model="query.ownerId"
+                         filterable
+                         remote
+                         reserve-keyword
+                         :remote-method="getClients" placeholder="请选择" clearable
+              >
                 <el-option
-                    v-for="(item, index) in customerList"
-                    :key="index"
-                    :label="item.name"
-                    :value="item.id"
-                    :disabled="item.disabled"
+                  v-for="(item, index) in customerList"
+                  :key="index"
+                  :label="item.name"
+                  :value="item.id"
+                  :disabled="item.disabled"
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="5">
+<!--          </el-col>-->
+<!--          <el-col :span="5">-->
             <el-form-item label="小区名称">
-              <el-select v-model="query.communityId" placeholder="请选择" clearable>
+              <el-select v-model="query.houseBlockId" filterable
+                         remote
+                         reserve-keyword
+                         :remote-method="getCommunityList" clearable
+              >
                 <el-option
-                    v-for="(item, index) in communityList"
-                    :key="index"
-                    :label="item.name"
-                    :value="item.id"
-                    :disabled="item.disabled"
+                  v-for="(item, index) in communityList"
+                  :key="index"
+                  :label="item.name"
+                  :value="item.id"
+                  :disabled="item.disabled"
                 ></el-option>
               </el-select>
             </el-form-item>
-          </el-col>
+<!--          </el-col>-->
 
-          <el-col :span="5">
+<!--          <el-col :span="5">-->
             <el-form-item>
               <el-button type="primary" icon="el-icon-search" @click="search()">查询</el-button>
             </el-form-item>
-          </el-col>
+<!--          </el-col>-->
         </el-form>
       </el-row>
       <div class="Jcommon-layout-main Jflex-main" style="overflow-y: scroll" v-if="loaded">
@@ -194,7 +203,6 @@ export default {
   components: {},
   data() {
     return {
-      customerList: [],
       showAll: false,
       activeName: 'first',
       loaded: false,
@@ -202,9 +210,10 @@ export default {
       query: {
         beginDate: undefined,
         endDate: undefined,
-        customerId: undefined,
-        communityId: undefined
+        ownerId: undefined,
+        houseBlockId: undefined
       },
+      customerList: [],
       communityList: [],
       list: [],
       pickerVal: [],
@@ -272,6 +281,36 @@ export default {
     },
     search() {
       this.initData()
+    },
+    getClients(query) {
+      request({
+        url: `${process.env.VUE_APP_BASE_API2}/api/admin/ds/owner/list`,
+        method: 'get',
+        params: { name: query }
+      }).then(res => {
+        console.log(res)
+        this.customerList = res.map(item => {
+          return {
+            id: item.id,
+            name: item.userName
+          }
+        })
+      })
+    },
+    getCommunityList(query) {
+      request({
+        url: `${process.env.VUE_APP_BASE_API2}/api/admin/ds/HouseBlock/list`,
+        method: 'get',
+        params: { name: query }
+      }).then(res => {
+        console.log(res)
+        this.communityList = res.map(item => {
+          return {
+            id: item.id,
+            name: item.name
+          }
+        })
+      })
     },
     refresh(isrRefresh) {
       this.formVisible = false
