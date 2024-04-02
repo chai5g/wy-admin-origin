@@ -1,88 +1,90 @@
 <template>
-  <div class='component-upload-image'>
+  <div class="component-upload-image">
     <el-upload
-      :action='uploadImgUrl'
-      list-type='picture-card'
-      :on-success='handleUploadSuccess'
-      :before-upload='handleBeforeUpload'
-      :limit='limit'
-      :on-error='handleUploadError'
-      :on-exceed='handleExceed'
-      name='multipart'
-      :on-remove='handleRemove'
-      :show-file-list='true'
-      :headers='headers'
-      :file-list='fileList'
-      :on-preview='handlePictureCardPreview'
-      :class='{hide: this.fileList.length >= this.limit}'
-      :disabled='disabled'
+      :action="uploadImgUrl"
+      list-type="picture-card"
+      :on-success="handleUploadSuccess"
+      :before-upload="handleBeforeUpload"
+      :limit="limit"
+      :on-error="handleUploadError"
+      :on-exceed="handleExceed"
+      name="multipart"
+      :on-remove="handleRemove"
+      :show-file-list="true"
+      :file-list="fileList"
+      :on-preview="handlePictureCardPreview"
+      :class="{ hide: this.fileList.length >= this.limit }"
+      :disabled="disabled"
     >
-      <i class='el-icon-plus'></i>
+      <i class="el-icon-plus"></i>
     </el-upload>
 
     <!-- 上传提示 -->
-    <div class='el-upload__tip' slot='tip' v-if='showTip'>
+    <div class="el-upload__tip" slot="tip" v-if="showTip">
       请上传
-      <template v-if='fileSize'> 大小不超过 <b style='color: #f56c6c'>{{ fileSize }}MB</b></template>
-      <template v-if='fileType'> 格式为 <b style='color: #f56c6c'>{{ fileType.join('/') }}</b></template>
+      <template v-if="fileSize">
+        大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b></template
+      >
+      <template v-if="fileType">
+        格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b></template
+      >
       的文件
     </div>
 
     <el-dialog
-      :visible.sync='dialogVisible'
-      title='预览'
-      width='800'
+      :visible.sync="dialogVisible"
+      title="预览"
+      width="800"
       append-to-body
     >
       <img
-        :src='dialogImageUrl'
-        style='display: block; max-width: 100%; margin: 0 auto'
+        :src="dialogImageUrl"
+        style="display: block; max-width: 100%; margin: 0 auto"
       />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getToken } from '@/utils/auth';
-
 export default {
   props: {
     value: [String, Object, Array],
     // 图片数量限制
     limit: {
       type: Number,
-      default: 5,
+      default: 5
     },
     // 大小限制(MB)
     fileSize: {
       type: Number,
-      default: 5,
+      default: 5
     },
     // 文件类型, 例如['png', 'jpg', 'jpeg']
     fileType: {
       type: Array,
-      default: () => ['png', 'jpg', 'jpeg'],
+      default: () => ["png", "jpg", "jpeg"]
     },
     // 是否显示提示
     isShowTip: {
       type: Boolean,
-      default: true,
+      default: true
     },
     //是否禁用
-    disabled: false,
+    disabled: false
   },
   data() {
     return {
-      dialogImageUrl: '',
+      dialogImageUrl: "",
       dialogVisible: false,
       hideUpload: false,
-      baseUrl:'',
+      baseUrl: "",
       // baseUrl: 'https://wy-sh-1316853653.cos.ap-shanghai.myqcloud.com',
-      uploadImgUrl: process.env.VUE_APP_BASE_API2 + '/api/admin/ds/upload/image', // 上传的图片服务器地址
+      uploadImgUrl:
+        process.env.VUE_APP_BASE_API2 + "/api/admin/ds/upload/image", // 上传的图片服务器地址
       // headers: {
       //   Authorization: 'Bearer ' + getToken(),
       // },
-      fileList: [],
+      fileList: []
     };
   },
   watch: {
@@ -90,10 +92,10 @@ export default {
       handler(val) {
         if (val) {
           // 首先将值转为数组
-          const list = Array.isArray(val) ? val:this.value.split(',');
+          const list = Array.isArray(val) ? val : this.value.split(",");
           // 然后将数组转为对象数组
           this.fileList = list.map(item => {
-            if (typeof item === 'string') {
+            if (typeof item === "string") {
               if (item.indexOf(this.baseUrl) === -1) {
                 item = { name: this.baseUrl + item, url: this.baseUrl + item };
               } else {
@@ -108,14 +110,14 @@ export default {
         }
       },
       deep: true,
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   computed: {
     // 是否显示提示
     showTip() {
       return this.isShowTip && (this.fileType || this.fileSize);
-    },
+    }
   },
   methods: {
     // 删除图片
@@ -123,22 +125,22 @@ export default {
       const findex = this.fileList.map(f => f.name).indexOf(file.name);
       if (findex > -1) {
         this.fileList.splice(findex, 1);
-        this.$emit('input', this.listToString(this.fileList));
+        this.$emit("input", this.listToString(this.fileList));
       }
     },
     // 上传成功回调
     handleUploadSuccess(res) {
       this.fileList.push({ name: res.data.uid, url: res.data.url });
-      this.$emit('input', this.listToString(this.fileList));
+      this.$emit("input", this.listToString(this.fileList));
       this.loading.close();
     },
     // 上传前loading加载
     handleBeforeUpload(file) {
       let isImg = false;
       if (this.fileType.length) {
-        let fileExtension = '';
-        if (file.name.lastIndexOf('.') > -1) {
-          fileExtension = file.name.slice(file.name.lastIndexOf('.') + 1);
+        let fileExtension = "";
+        if (file.name.lastIndexOf(".") > -1) {
+          fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1);
         }
         isImg = this.fileType.some(type => {
           if (file.type.indexOf(type) > -1) return true;
@@ -146,12 +148,12 @@ export default {
           return false;
         });
       } else {
-        isImg = file.type.indexOf('image') > -1;
+        isImg = file.type.indexOf("image") > -1;
       }
 
       if (!isImg) {
         this.$message.error(
-          `文件格式不正确, 请上传${this.fileType.join('/')}图片格式文件!`,
+          `文件格式不正确, 请上传${this.fileType.join("/")}图片格式文件!`
         );
         return false;
       }
@@ -164,8 +166,8 @@ export default {
       }
       this.loading = this.$loading({
         lock: true,
-        text: '上传中',
-        background: 'rgba(0, 0, 0, 0.7)',
+        text: "上传中",
+        background: "rgba(0, 0, 0, 0.7)"
       });
     },
     // 文件个数超出
@@ -175,8 +177,8 @@ export default {
     // 上传失败
     handleUploadError() {
       this.$message({
-        type: 'error',
-        message: '上传失败',
+        type: "error",
+        message: "上传失败"
       });
       this.loading.close();
     },
@@ -187,17 +189,17 @@ export default {
     },
     // 对象转成指定字符串分隔
     listToString(list, separator) {
-      let strs = '';
-      separator = separator || ',';
+      let strs = "";
+      separator = separator || ",";
       for (let i in list) {
-        strs += list[i].url.replace(this.baseUrl, '') + separator;
+        strs += list[i].url.replace(this.baseUrl, "") + separator;
       }
-      return strs != '' ? strs.substr(0, strs.length - 1):'';
-    },
-  },
+      return strs != "" ? strs.substr(0, strs.length - 1) : "";
+    }
+  }
 };
 </script>
-<style scoped lang='scss'>
+<style scoped lang="scss">
 // .el-upload--picture-card 控制加号部分
 ::v-deep.hide .el-upload--picture-card {
   display: none;
@@ -209,7 +211,8 @@ export default {
   transition: all 0s;
 }
 
-::v-deep .el-list-enter, .el-list-leave-active {
+::v-deep .el-list-enter,
+.el-list-leave-active {
   opacity: 0;
   transform: translateY(0);
 }
