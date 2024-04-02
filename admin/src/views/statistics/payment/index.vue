@@ -188,6 +188,8 @@
 
 <script>
 
+import request from '@/utils/request'
+
 export default {
   components: {},
   data() {
@@ -259,82 +261,14 @@ export default {
         this.query.beginDate = ''
         this.query.endDate = ''
       }
-      // request({
-      //     url: `/statistics/PaymentStatistics`,
-      //     method: 'get',
-      //     data: this.query,
-      // }).then(res => {
-
-      this.data = {
-        paySum: {
-          receivable: 100,
-          lateFeeMoney: 100,
-          discount: 100,
-          payMoney: 100,
-          prePayMoney: 100,
-          preSaveMoney: 100
-        },
-        billSum: [
-          {
-            feeItemName: '物业费',
-            lateFee: 100,
-            discount: 100,
-            total: 100
-          },
-          {
-            feeItemName: '水费',
-            lateFee: 100,
-            discount: 100,
-            total: 100
-          }
-        ],
-        depositSum: [
-          {
-            feeItemName: '物业费',
-            total: 100
-          },
-          {
-            feeItemName: '水费',
-            total: 100
-          }
-        ],
-        tempSum: [
-          {
-            feeItemName: '物业费',
-            total: 100
-          },
-          {
-            feeItemName: '水费',
-            total: 100
-          }
-        ],
-        refundSum: {
-          receivable: 100
-        },
-        depositRefundSum: [
-          {
-            feeItemName: '物业费',
-            total: 100
-          },
-          {
-            feeItemName: '水费',
-            total: 100
-          }
-        ],
-        tempRefundSum: [
-          {
-            feeItemName: '物业费',
-            total: 100
-          },
-          {
-            feeItemName: '水费',
-            total: 100
-          }
-        ]
-      }
-
-      this.loaded = true
-      // });
+      request({
+        url: `${process.env.VUE_APP_BASE_API3}/statistics/PaymentStatistics`,
+        method: 'get',
+        params: this.query
+      }).then(res => {
+        this.data = res
+        this.loaded = true
+      })
     },
     search() {
       this.initData()

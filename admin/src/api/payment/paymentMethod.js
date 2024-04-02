@@ -3,7 +3,7 @@ import request from '@/utils/request';
 // 查询支付方式列表
 export function listPaymentMethod(query) {
     return request({
-        url: '/payment/paymentMethod/list',
+        url: `${process.env.VUE_APP_BASE_API3}/payment/paymentMethod/list`,
         method: 'get',
         params: query,
     });
