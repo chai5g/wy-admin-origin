@@ -303,7 +303,7 @@ export default {
       // 获取省市区数据
       // this.getProvince()
     },
-    provinceChange(key) { 
+    provinceChange(key) {
       this.pram.wyAppPlotList[
         key
       ].provinceName = this.$refs.cascader[key].getCheckedNodes()[0].pathLabels[0];
