@@ -303,26 +303,25 @@ export default {
       // 获取省市区数据
       // this.getProvince()
     },
-    provinceChange(key) {
-      // console.log(this.$refs.cascader[0].getCheckedNodes(), 'this.$refs.cascader[0].getCheckedNodes()')
+    provinceChange(key) { 
       this.pram.wyAppPlotList[
         key
-      ].provinceName = this.$refs.cascader[0].getCheckedNodes()[0].pathLabels[0];
+      ].provinceName = this.$refs.cascader[key].getCheckedNodes()[0].pathLabels[0];
       this.pram.wyAppPlotList[
         key
-      ].provinceId = this.$refs.cascader[0].getCheckedNodes()[0].path[0];
+      ].provinceId = this.$refs.cascader[key].getCheckedNodes()[0].path[0];
       this.pram.wyAppPlotList[
         key
-      ].cityName = this.$refs.cascader[0].getCheckedNodes()[0].pathLabels[1];
+      ].cityName = this.$refs.cascader[key].getCheckedNodes()[0].pathLabels[1];
       this.pram.wyAppPlotList[
         key
-      ].cityId = this.$refs.cascader[0].getCheckedNodes()[0].path[1];
+      ].cityId = this.$refs.cascader[key].getCheckedNodes()[0].path[1];
       this.pram.wyAppPlotList[
         key
-      ].areaName = this.$refs.cascader[0].getCheckedNodes()[0].pathLabels[2];
+      ].areaName = this.$refs.cascader[key].getCheckedNodes()[0].pathLabels[2];
       this.pram.wyAppPlotList[
         key
-      ].areaId = this.$refs.cascader[0].getCheckedNodes()[0].path[2];
+      ].areaId = this.$refs.cascader[key].getCheckedNodes()[0].path[2];
     },
     getProvince() {
       deployApi.getRegion().then(data => {
