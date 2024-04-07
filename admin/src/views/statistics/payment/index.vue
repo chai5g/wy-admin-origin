@@ -284,6 +284,7 @@ export default {
     },
     getClients(query) {
       request({
+        baseURL: '/',
         url: `${process.env.VUE_APP_BASE_API2}/api/admin/ds/owner/list`,
         method: 'get',
         params: { name: query }
@@ -299,6 +300,7 @@ export default {
     },
     getCommunityList(query) {
       request({
+        baseURL: '/',
         url: `${process.env.VUE_APP_BASE_API2}/api/admin/ds/HouseBlock/list`,
         method: 'get',
         params: { name: query }

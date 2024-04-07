@@ -3,82 +3,82 @@
     <el-card class="box-card">
       <el-row class="Jcommon-search-box" :gutter="16">
         <el-form @submit.native.prevent :inline="true" :model="formInline">
-<!--          <el-col :span="5">-->
-            <el-form-item label="付款方式">
-              <el-select v-model="query.payMethod" placeholder="请选择" clearable>
-                <el-option
-                  v-for="(item, index) in payMethodOptions"
-                  :key="index"
-                  :label="item.name"
-                  :value="item.code"
-                  :disabled="item.disabled"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-<!--          </el-col>-->
-<!--          <el-col :span="4">-->
-            <el-form-item label="类型">
-              <el-select v-model="query.type" placeholder="请选择">
-                <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-<!--          </el-col>-->
-<!--          <el-col :span="7">-->
-            <el-form-item label="缴费时间">
-              <el-date-picker
-                v-model="pickerVal"
-                type="daterange"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :picker-options="pickerOptions"
-                value-format="timestamp"
-                clearable
-                :editable="false"
-              ></el-date-picker>
-            </el-form-item>
-<!--          </el-col>-->
-<!--          <el-col :span="3">-->
-            <el-form-item label="客户名称">
-              <el-select v-model="query.ownerId"
-                         filterable
-                         remote
-                         reserve-keyword
-                         :remote-method="getClients" placeholder="请选择" clearable
-              >
-                <el-option
-                  v-for="(item, index) in customerList"
-                  :key="index"
-                  :label="item.name"
-                  :value="item.id"
-                  :disabled="item.disabled"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-<!--          </el-col>-->
-<!--          <el-col :span="3">-->
-            <el-form-item label="小区名称">
-              <el-select v-model="query.houseBlockId" filterable
-                         remote
-                         reserve-keyword
-                         :remote-method="getCommunityList" clearable
-              >
-                <el-option
-                  v-for="(item, index) in communityList"
-                  :key="index"
-                  :label="item.name"
-                  :value="item.id"
-                  :disabled="item.disabled"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-<!--          </el-col>-->
-<!--          <el-col :span="3">-->
-            <el-form-item>
-              <el-button type="primary" icon="el-icon-search" @click="search()">查询</el-button>
-              <el-button icon="el-icon-refresh-right" @click="reset()">重置</el-button>
-            </el-form-item>
-<!--          </el-col>-->
+          <!--          <el-col :span="5">-->
+          <el-form-item label="付款方式">
+            <el-select v-model="query.payMethod" placeholder="请选择" clearable>
+              <el-option
+                v-for="(item, index) in payMethodOptions"
+                :key="index"
+                :label="item.name"
+                :value="item.code"
+                :disabled="item.disabled"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <!--          </el-col>-->
+          <!--          <el-col :span="4">-->
+          <el-form-item label="类型">
+            <el-select v-model="query.type" placeholder="请选择">
+              <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <!--          </el-col>-->
+          <!--          <el-col :span="7">-->
+          <el-form-item label="缴费时间">
+            <el-date-picker
+              v-model="pickerVal"
+              type="daterange"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :picker-options="pickerOptions"
+              value-format="timestamp"
+              clearable
+              :editable="false"
+            ></el-date-picker>
+          </el-form-item>
+          <!--          </el-col>-->
+          <!--          <el-col :span="3">-->
+          <el-form-item label="客户名称">
+            <el-select v-model="query.ownerId"
+                       filterable
+                       remote
+                       reserve-keyword
+                       :remote-method="getClients" placeholder="请选择" clearable
+            >
+              <el-option
+                v-for="(item, index) in customerList"
+                :key="index"
+                :label="item.name"
+                :value="item.id"
+                :disabled="item.disabled"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <!--          </el-col>-->
+          <!--          <el-col :span="3">-->
+          <el-form-item label="小区名称">
+            <el-select v-model="query.houseBlockId" filterable
+                       remote
+                       reserve-keyword
+                       :remote-method="getCommunityList" clearable
+            >
+              <el-option
+                v-for="(item, index) in communityList"
+                :key="index"
+                :label="item.name"
+                :value="item.id"
+                :disabled="item.disabled"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <!--          </el-col>-->
+          <!--          <el-col :span="3">-->
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" @click="search()">查询</el-button>
+            <el-button icon="el-icon-refresh-right" @click="reset()">重置</el-button>
+          </el-form-item>
+          <!--          </el-col>-->
         </el-form>
       </el-row>
       <div class="Jcommon-layout-main Jflex-main">
@@ -286,6 +286,7 @@ export default {
     },
     getClients(query) {
       request({
+        baseURL: '/',
         url: `${process.env.VUE_APP_BASE_API2}/api/admin/ds/owner/list`,
         method: 'get',
         params: { name: query }
@@ -301,6 +302,7 @@ export default {
     },
     getCommunityList(query) {
       request({
+        baseURL: '/',
         url: `${process.env.VUE_APP_BASE_API2}/api/admin/ds/HouseBlock/list`,
         method: 'get',
         params: { name: query }
@@ -313,7 +315,7 @@ export default {
           }
         })
       })
-    },
+    }
   }
 }
 </script>
