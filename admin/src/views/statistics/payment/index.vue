@@ -271,6 +271,7 @@ export default {
         this.query.endDate = ''
       }
       request({
+        baseURL: '/',
         url: `${process.env.VUE_APP_BASE_API3}/statistics/PaymentStatistics`,
         method: 'get',
         params: this.query

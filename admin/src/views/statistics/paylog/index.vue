@@ -219,6 +219,7 @@ export default {
         ...this.query
       }
       request({
+        baseURL: '/',
         url: `${process.env.VUE_APP_BASE_API3}/statistics/PaymentPayLog`,
         method: 'get',
         params: query
@@ -235,6 +236,7 @@ export default {
       })
       .then(() => {
         request({
+          baseURL: '/',
           url: `${process.env.VUE_APP_BASE_API3}/wuye/PaymentPayLog/${id}`,
           method: 'DELETE'
         }).then(res => {

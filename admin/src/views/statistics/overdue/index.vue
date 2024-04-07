@@ -134,6 +134,7 @@ export default {
         ...this.query,
       };
       request({
+        baseURL: '/',
         url: `${process.env.VUE_APP_BASE_API3}/statistics/paymentBill/overdue`,
         method: 'get',
         params: query,
@@ -151,6 +152,7 @@ export default {
     },
     getFeeItemList() {
       request({
+        baseURL: '/',
         url: `${process.env.VUE_APP_BASE_API3}/baseconfig/ConfigFeeItem/select`,
         method: 'get',
         params: { type: 'house' },
